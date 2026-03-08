@@ -3549,7 +3549,16 @@ function toggleBrokerPanel() {
                     const isDemoNika = DEMO_MODE && (agent.agentId === 'demo_nika' || agent.name === '尼卡');
                     const isDemoMercury = DEMO_MODE && (agent.agentId === 'demo_mercury' || agent.name === '水星');
                     
-                    if (isDemoNika || isDemoMercury) {
+                    // 露米特殊处理：使用 lumi_idle 精灵表
+                    if (agent.agentId === 'lumi' || agent.name === '露米') {
+                        const animKey = 'lumi_idle';
+                        if (game.textures.exists(animKey) && game.anims.exists(animKey)) {
+                            sprite = game.add.sprite(p.x, p.y, animKey).setOrigin(0.5, 1).setScale(1.4);
+                            sprite.anims.play(animKey, true);
+                        } else {
+                            sprite = game.add.text(p.x, p.y, '⭐', { fontFamily: 'ArkPixel, monospace', fontSize: '30px' }).setOrigin(0.5, 1);
+                        }
+                    } else if (isDemoNika || isDemoMercury) {
                         // 统一使用动态像素角色，避免依赖已删除的 demo 静态图
                         const animKey = 'guest_anim_1';
                         const f = 0;
@@ -4022,6 +4031,7 @@ function toggleBrokerPanel() {
             this.load.spritesheet('guest_anim_4', '/static/guest_anim_4.webp?v={{VERSION_TIMESTAMP}}', { frameWidth: 32, frameHeight: 32 });
             this.load.spritesheet('guest_anim_5', '/static/guest_anim_5.webp?v={{VERSION_TIMESTAMP}}', { frameWidth: 32, frameHeight: 32 });
             this.load.spritesheet('guest_anim_6', '/static/guest_anim_6.webp?v={{VERSION_TIMESTAMP}}', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('lumi_idle', '/static/lumi-idle-spritesheet.png?v={{VERSION_TIMESTAMP}}', { frameWidth: 128, frameHeight: 128 });
         }
 
         function create() {
@@ -4065,6 +4075,14 @@ function toggleBrokerPanel() {
                     repeat: -1
                 });
             }
+
+            // 露米 idle 动画（8 帧循环）
+            this.anims.create({
+                key: "lumi_idle",
+                frames: this.anims.generateFrameNumbers("lumi_idle", { start: 0, end: 7 }),
+                frameRate: 8,
+                repeat: -1
+            });
 
             star = game.physics.add.sprite(areas.breakroom.x, areas.breakroom.y, 'star_idle');
             star.setOrigin(0.5);
