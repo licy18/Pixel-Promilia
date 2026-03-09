@@ -74,7 +74,7 @@ STATE_TO_AREA_MAP = {
     "writing": "writing",
     "researching": "writing",
     "executing": "writing",
-    "syncing": "writing",
+    "syncing": "bedroom",
     "error": "error",
 }
 

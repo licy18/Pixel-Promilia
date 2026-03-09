@@ -3471,10 +3471,12 @@ function toggleBrokerPanel() {
             // 休息区域范围（511,262）（841,621）
             // 工作区域范围（190,526）（380,683）
             // error 区域范围（932,275）（1109,327）
+            // 卧室区域范围（932,570）（1109,695）- syncing 状态使用
             const rects = {
                 breakroom: { x1: 511, y1: 262, x2: 841, y2: 621 },
                 writing:   { x1: 190, y1: 526, x2: 380, y2: 683 },
-                error:     { x1: 932, y1: 275, x2: 1109, y2: 327 }
+                error:     { x1: 932, y1: 275, x2: 1109, y2: 327 },
+                bedroom:   { x1: 932, y1: 570, x2: 1109, y2: 695 }
             };
             return rects[area] || rects.breakroom;
         }
@@ -3519,6 +3521,16 @@ function toggleBrokerPanel() {
                     { x: 990, y: 260 },
                     { x: 1050, y: 350 },
                     { x: 940, y: 310 }
+                ],
+                bedroom: [
+                    { x: 932, y: 570 },
+                    { x: 1109, y: 695 },
+                    { x: 1020, y: 630 },
+                    { x: 960, y: 660 },
+                    { x: 1070, y: 600 },
+                    { x: 990, y: 640 },
+                    { x: 1050, y: 680 },
+                    { x: 940, y: 610 }
                 ]
             };
             const arr = map[area] || map.breakroom;
@@ -3529,16 +3541,16 @@ function toggleBrokerPanel() {
             if (!game) return;
             const visitors = getMergedVisitors();
             const seenIds = new Set();
-            let idxBreak = 0, idxWrite = 0, idxError = 0;
+            let idxBreak = 0, idxWrite = 0, idxError = 0, idxBedroom = 0;
 
             visitors.forEach(agent => {
                 const id = agent.agentId;
                 seenIds.add(id);
 
                 const isDemo = !!agent.isDemo || (DEMO_MODE && (id === 'demo_nika' || id === 'demo_mercury' || agent.name === '尼卡' || agent.name === '水星'));
-                const area = agent.area || (agent.state === 'error' ? 'error' : (agent.state === 'idle' ? 'breakroom' : 'writing'));
+                const area = agent.area || (agent.state === 'error' ? 'error' : (agent.state === 'syncing' ? 'bedroom' : (agent.state === 'idle' ? 'breakroom' : 'writing')));
 
-                const idx = area === 'breakroom' ? idxBreak++ : area === 'error' ? idxError++ : idxWrite++;
+                const idx = area === 'breakroom' ? idxBreak++ : area === 'error' ? idxError++ : area === 'bedroom' ? idxBedroom++ : idxWrite++;
                 const p = isDemo
                     ? randomPointInRect(getAreaRect(area))
                     : getAreaPoint(area, idx);
