@@ -1,0 +1,47 @@
+[
+  {
+    "agentId": "coco",
+    "name": "呱呱",
+    "isMain": false,
+    "state": "idle",
+    "detail": "待命中",
+    "area": "breakroom",
+    "source": "openclaw",
+    "joinKey": null,
+    "authStatus": "approved",
+    "authExpiresAt": null,
+    "lastPushAt": null,
+    "emoji": "🐸",
+    "color": "#4CAF50"
+  },
+  {
+    "agentId": "gugu",
+    "name": "咕咕",
+    "isMain": false,
+    "state": "idle",
+    "detail": "待命中",
+    "area": "breakroom",
+    "source": "openclaw",
+    "joinKey": null,
+    "authStatus": "approved",
+    "authExpiresAt": null,
+    "lastPushAt": null,
+    "emoji": "🐦",
+    "color": "#FF9800"
+  },
+  {
+    "agentId": "lumi",
+    "name": "露米",
+    "isMain": false,
+    "state": "idle",
+    "detail": "待命中",
+    "area": "breakroom",
+    "source": "openclaw",
+    "joinKey": null,
+    "authStatus": "approved",
+    "authExpiresAt": null,
+    "lastPushAt": null,
+    "emoji": "🧚",
+    "color": "#FF69B4"
+  }
+]

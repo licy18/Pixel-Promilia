@@ -2080,3 +2080,36 @@ if __name__ == "__main__":
 
     app.run(host="0.0.0.0", port=backend_port, debug=False)
 
+
+# Guest Agents 恢复机制
+def restore_guest_agents_if_needed():
+    """如果 guest agents 丢失，从默认配置恢复"""
+    import shutil
+    agents = load_agents_state()
+    guest_agents = [a for a in agents if not a.get("isMain")]
+    
+    # 如果 guest agents 少于 3 个，从默认配置恢复
+    if len(guest_agents) < 3:
+        default_guest_file = os.path.join(ROOT_DIR, "guest-agents.default.json")
+        if os.path.exists(default_guest_file):
+            try:
+                with open(default_guest_file, "r", encoding="utf-8") as f:
+                    default_guests = json.load(f)
+                
+                # 保留 main agent，添加 guest agents
+                main_agent = next((a for a in agents if a.get("isMain")), None)
+                now = datetime.now().isoformat()
+                
+                # 更新 guest agents 的时间戳
+                for g in default_guests:
+                    g["updated_at"] = now
+                    g["lastPushAt"] = now
+                
+                restored = [main_agent] + default_guests if main_agent else default_guests
+                save_agents_state(restored)
+                print(f"🔧 已恢复 guest agents: {[g['name'] for g in default_guests]}")
+            except Exception as e:
+                print(f"⚠️ 恢复 guest agents 失败：{e}")
+
+# 在启动时恢复 guest agents
+restore_guest_agents_if_needed()
