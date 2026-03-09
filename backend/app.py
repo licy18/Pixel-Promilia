@@ -857,7 +857,7 @@ def get_agents():
             try:
                 last_push_at = datetime.fromisoformat(last_push_at_str)
                 age = (now - last_push_at).total_seconds()
-                if age > 300:  # 5分钟无推送自动离线
+                if age > 86400:  # 5分钟无推送自动离线
                     a["authStatus"] = "offline"
             except Exception:
                 pass
@@ -1000,7 +1000,7 @@ def join_agent():
                 age = _age_seconds(a.get("lastPushAt"))
                 if age is None:
                     age = _age_seconds(a.get("updated_at"))
-                if age is not None and age > 300:
+                if age is not None and age > 86400:  # 24 小时
                     a["authStatus"] = "offline"
 
             max_concurrent = int(key_item.get("maxConcurrent", 3))
