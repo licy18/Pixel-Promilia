@@ -3693,17 +3693,13 @@ function toggleBrokerPanel() {
                 ? (window.__demoVisitors.find(v => v.agentId === id) || window.__demoVisitors.find(v => v.name === (g.nameText && g.nameText.text)))
                 : null;
 
-            const statusThoughtsMap = {
-                idle: ['我在休息区待命', '先放松一下，等下一步任务', '我在休息充电中'],
-                writing: ['我在工作区处理任务', '正在整理文档与执行中', '工作区专注推进中'],
-                researching: ['我在调研模式，搜集信息', '正在查资料和验证线索', '研究中，稍后同步结论'],
-                executing: ['执行中，正在跑流程', '我在工作区推进任务', '正在把计划落地执行'],
-                syncing: ['同步中，马上更新状态', '正在同步进度到系统', '数据同步中请稍候'],
-                error: ['我在 bug 区排查问题', '检测到异常，正在修复', '报警中，先定位再处理']
-            };
-            const agentState = (guestAgents.find(a => a.agentId === id) || {}).state || 'idle';
-            const thoughts = statusThoughtsMap[agentState] || statusThoughtsMap.idle;
-            const text = (demoVisitor && demoVisitor.bubbleText) ? demoVisitor.bubbleText : thoughts[Math.floor(Math.random() * thoughts.length)];
+            // 优先从 agents-state.json 的 detail 字段获取文本
+            const agentData = guestAgents.find(a => a.agentId === id);
+            const text = (demoVisitor && demoVisitor.bubbleText) 
+                ? demoVisitor.bubbleText 
+                : (agentData && agentData.detail) 
+                    ? agentData.detail 
+                    : '待命中...';
 
             if (guestBubbles[id]) {
                 guestBubbles[id].destroy();
@@ -4678,46 +4674,83 @@ function toggleBrokerPanel() {
         }
 
         function fetchStatus() {
-            return fetch('/status', { cache: 'no-store' })
-                .then(response => response.json())
-                .then(data => {
-                    try {
-
-                        const nextState = normalizeState(data.state);
-                        const stateInfo = STATES[nextState] || STATES.idle;
-                        // If we're mid-transition, don't restart the path every poll
-                        const changed = (pendingDesiredState === null) && (nextState !== currentState);
-                        const nextLine = '[' + stateInfo.name + '] ' + (data.detail || '...');
-                        // 不论 changed 与否，都按服务端最新状态强制一次视觉同步，避免动画卡旧状态
-                        pendingDesiredState = null;
-                        if (currentState !== nextState) {
-                            currentState = nextState;
+            // 并行获取主 Agent 状态和所有访客 Agent 状态
+            return Promise.all([
+                fetch('/status', { cache: 'no-store' }).then(r => r.json()).catch(() => null),
+                fetch('/agents?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).catch(() => [])
+            ]).then(([statusData, agentsData]) => {
+                try {
+                    // 合并所有 Agent：主 Agent + 访客 Agent
+                    const allAgents = [];
+                    
+                    // 添加主 Agent（如果有）
+                    if (statusData) {
+                        allAgents.push({
+                            agentId: 'main',
+                            name: '呱呱',
+                            state: statusData.state,
+                            detail: statusData.detail,
+                            updated_at: statusData.updated_at || new Date().toISOString()
+                        });
+                    }
+                    
+                    // 添加访客 Agent
+                    if (Array.isArray(agentsData)) {
+                        allAgents.push(...agentsData);
+                    }
+                    
+                    // 找到最后更新状态的 Agent（按 updated_at 排序）
+                    let latestAgent = null;
+                    let latestTime = null;
+                    allAgents.forEach(agent => {
+                        if (agent.updated_at) {
+                            const t = new Date(agent.updated_at).getTime();
+                            if (latestTime === null || t > latestTime) {
+                                latestTime = t;
+                                latestAgent = agent;
+                            }
                         }
-                        applyVisualState(nextState);
+                    });
+                    
+                    // 构造显示文本：[Agent 名] 详细信息
+                    const nextLine = latestAgent 
+                        ? `[${latestAgent.name || '未知'}] ${latestAgent.detail || '...'}`
+                        : '[系统] 初始化中...';
+                    
+                    // 主 Agent 状态用于视觉控制
+                    const nextState = statusData ? normalizeState(statusData.state) : 'idle';
+                    const stateInfo = STATES[nextState] || STATES.idle;
+                    const changed = (pendingDesiredState === null) && (nextState !== currentState);
+                    
+                    // 不论 changed 与否，都按服务端最新状态强制一次视觉同步，避免动画卡旧状态
+                    pendingDesiredState = null;
+                    if (currentState !== nextState) {
+                        currentState = nextState;
+                    }
+                    applyVisualState(nextState);
 
-                        if (changed) {
+                    if (changed) {
+                        typewriterTarget = nextLine;
+                        typewriterText = '';
+                        typewriterIndex = 0;
+                    } else {
+                        if (!typewriterTarget || typewriterTarget !== nextLine) {
                             typewriterTarget = nextLine;
                             typewriterText = '';
                             typewriterIndex = 0;
-                        } else {
-                            if (!typewriterTarget || typewriterTarget !== nextLine) {
-                                typewriterTarget = nextLine;
-                                typewriterText = '';
-                                typewriterIndex = 0;
-                            }
                         }
-                    } catch (err) {
-                        console.error('fetchStatus apply error', err);
-                        typewriterTarget = '状态更新异常，正在恢复...';
-                        typewriterText = '';
-                        typewriterIndex = 0;
                     }
-                })
-                .catch(error => {
-                    typewriterTarget = '连接失败，正在重试...';
+                } catch (err) {
+                    console.error('fetchStatus apply error', err);
+                    typewriterTarget = '状态更新异常，正在恢复...';
                     typewriterText = '';
                     typewriterIndex = 0;
-                });
+                }
+            }).catch(error => {
+                typewriterTarget = '连接失败，正在重试...';
+                typewriterText = '';
+                typewriterIndex = 0;
+            });
         }
 
         function moveStar(time) {
