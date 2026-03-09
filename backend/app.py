@@ -2078,7 +2078,18 @@ if __name__ == "__main__":
             print("Security hardening: OK")
     print("=" * 50)
 
-    app.run(host="0.0.0.0", port=backend_port, debug=False)
+    
+# Guest Agents 恢复机制（启动时检查）
+try:
+    import subprocess
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    restore_script = os.path.join(script_dir, "scripts", "restore-guest-agents.py")
+    if os.path.exists(restore_script):
+        subprocess.run(["python3", restore_script], check=False)
+except Exception as e:
+    print(f"⚠️ Guest agents 恢复失败：{e}")
+
+app.run(host="0.0.0.0", port=backend_port, debug=False)
 
 
 # Guest Agents 恢复机制
