@@ -1000,7 +1000,7 @@ def join_agent():
                 age = _age_seconds(a.get("lastPushAt"))
                 if age is None:
                     age = _age_seconds(a.get("updated_at"))
-                if age is not None and age > 86400:  # 24 小时
+                if age is not None and age > 86400:  # 24 小时无推送自动离线
                     a["authStatus"] = "offline"
 
             max_concurrent = int(key_item.get("maxConcurrent", 3))
