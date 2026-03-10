@@ -468,16 +468,16 @@
         }
         #asset-move-row .btn-move { color:#1f2937; }
         #asset-move-row .btn-move {
-            background-image:url('/static/btn-move-house-sprite.png?v=20260310_1010');
+            background-image:url('/static/btn-move-house-sprite.png?v=20260310_1050');
         }
         #asset-move-row .btn-home {
-            background-image:url('/static/btn-back-home-sprite.png?v=20260310_1010');
+            background-image:url('/static/btn-back-home-sprite.png?v=20260310_1050');
         }
         #asset-broker-row .btn-broker {
-            background-image:url('/static/btn-broker-sprite.png?v=20260310_1010');
+            background-image:url('/static/btn-broker-sprite.png?v=20260310_1050');
         }
         #asset-broker-row .btn-diy {
-            background-image:url('/static/btn-diy-sprite.png?v=20260310_1010');
+            background-image:url('/static/btn-diy-sprite.png?v=20260310_1050');
         }
         #asset-manual-panel {
             margin-top:0;
@@ -648,7 +648,7 @@
         #control-bar #btn-state-writing,
         #control-bar #btn-state-syncing,
         #control-bar #btn-state-error {
-            background-image: url('/static/btn-state-sprite.png?v=20260310_1010');
+            background-image: url('/static/btn-state-sprite.png?v=20260310_1050');
             background-color: transparent !important;
             background-repeat: no-repeat;
             background-size: 300% 100%;
@@ -683,7 +683,7 @@
         }
         /* 装修房间按钮使用像素精灵皮肤 */
         #control-bar #btn-open-drawer {
-            background-image: url('/static/btn-open-drawer-sprite.png?v=20260310_1010') !important;
+            background-image: url('/static/btn-open-drawer-sprite.png?v=20260310_1050') !important;
             background-color: transparent !important;
             background-repeat: no-repeat !important;
             background-size: 300% 100% !important;
@@ -1287,7 +1287,7 @@
         <button id="lang-btn-cn" onclick="setUILanguage('zh')" style="padding:8px 10px; font-family:ArkPixel,monospace; font-size:13px; cursor:pointer; border:2px solid #333; border-radius:5px; background:#333; color:#fff;">CN</button>
     </div>
 
-    <script src="/static/vendor/phaser-3.80.1.min.js?v=20260310_1010"></script>
+    <script src="/static/vendor/phaser-3.80.1.min.js?v=20260310_1050"></script>
     <script>
         // 简易中英文切换
         let uiLang = localStorage.getItem('uiLang') || 'en';
@@ -1390,7 +1390,7 @@
         function ensureMemoBgVisible() {
             const panel = document.getElementById('memo-panel');
             if (!panel) return;
-            panel.style.backgroundImage = "url('/static/memo-bg.webp?v=20260310_1010')";
+            panel.style.backgroundImage = "url('/static/memo-bg.webp?v=20260310_1050')";
             panel.classList.remove('no-bg');
         }
 
@@ -3574,11 +3574,14 @@ function toggleBrokerPanel() {
                     // 呱呱特殊处理：使用 coco-idle 精灵表动画
                     else if (agent.agentId === 'coco' || agent.name === '呱呱') {
                         const animKey = 'coco_idle';
-                        if (game.textures.exists(animKey) && game.anims.exists(animKey)) {
+                        // 只检查动画是否存在（动画存在说明纹理已加载）
+                        if (game && game.anims && game.anims.exists(animKey)) {
                             sprite = game.add.sprite(p.x, p.y, animKey).setOrigin(0.5, 1).setScale(0.25);
                             sprite.anims.play(animKey, true);
+                            console.log('✅呱呱动画播放中');
                         } else {
-                            sprite = game.add.text(p.x, p.y, '🐸', { fontFamily: 'ArkPixel, monospace', fontSize: '30px' }).setOrigin(0.5, 1);
+                            console.log('⚠️呱呱动画未就绪，使用静态图');
+                            sprite = game.add.image(p.x, p.y, 'coco-role').setOrigin(0.5, 1).setScale(1.15);
                         }
                     } else if (isDemoNika || isDemoMercury) {
                         // 统一使用动态像素角色，避免依赖已删除的 demo 静态图
@@ -4005,56 +4008,56 @@ function toggleBrokerPanel() {
 
             // cache-busting to avoid stale background on client/CDN
             // use smaller/new map version provided by user
-            this.load.image('office_bg', '/static/office_bg_small.webp?v=20260310_1010');
-            this.load.spritesheet('star_idle', '/static/star-idle-v5.png?v=20260310_1010', { frameWidth: 256, frameHeight: 256 });
+            this.load.image('office_bg', '/static/office_bg_small.webp?v=20260310_1050');
+            this.load.spritesheet('star_idle', '/static/star-idle-v5.png?v=20260310_1050', { frameWidth: 256, frameHeight: 256 });
 
             // Furniture
-            this.load.image('sofa_idle', '/static/sofa-idle-v3.png?v=20260310_1010');
-            this.load.image('sofa_shadow', '/static/sofa-shadow-v1.png?v=20260310_1010');
+            this.load.image('sofa_idle', '/static/sofa-idle-v3.png?v=20260310_1050');
+            this.load.image('sofa_shadow', '/static/sofa-shadow-v1.png?v=20260310_1050');
 
             // Decor
-            this.load.spritesheet('plants', '/static/plants-spritesheet.webp?v=20260310_1010', { frameWidth: 160, frameHeight: 160 });
-            this.load.spritesheet('posters', '/static/posters-spritesheet.webp?v=20260310_1010', { frameWidth: 160, frameHeight: 160 });
-            this.load.spritesheet('coffee_machine', '/static/coffee-machine-v3-grid.webp?v=20260310_1010', { frameWidth: 230, frameHeight: 230 });
-            this.load.image('coffee_machine_shadow', '/static/coffee-machine-shadow-v1.png?v=20260310_1010');
-            this.load.spritesheet('serverroom', '/static/serverroom-spritesheet.webp?v=20260310_1010', { frameWidth: 180, frameHeight: 251 });
+            this.load.spritesheet('plants', '/static/plants-spritesheet.webp?v=20260310_1050', { frameWidth: 160, frameHeight: 160 });
+            this.load.spritesheet('posters', '/static/posters-spritesheet.webp?v=20260310_1050', { frameWidth: 160, frameHeight: 160 });
+            this.load.spritesheet('coffee_machine', '/static/coffee-machine-v3-grid.webp?v=20260310_1050', { frameWidth: 230, frameHeight: 230 });
+            this.load.image('coffee_machine_shadow', '/static/coffee-machine-shadow-v1.png?v=20260310_1050');
+            this.load.spritesheet('serverroom', '/static/serverroom-spritesheet.webp?v=20260310_1050', { frameWidth: 180, frameHeight: 251 });
 
             // Error / bug animation: 180x180, 96 frames (repacked grid)
-            this.load.spritesheet('error_bug', '/static/error-bug-spritesheet-grid.webp?v=20260310_1010', { frameWidth: 220, frameHeight: 220 });
+            this.load.spritesheet('error_bug', '/static/error-bug-spritesheet-grid.webp?v=20260310_1050', { frameWidth: 220, frameHeight: 220 });
 
             // 运行时 Gemini 配置（用于搬家/中介生图）
             this.geminiConfig = { hasKey: false, model: 'gemini-3.1-flash-image-preview' };
 
             // Cat spritesheet: 160x160, 4x4=16 cats
-            this.load.spritesheet('cats', '/static/cats-spritesheet.webp?v=20260310_1010', { frameWidth: 160, frameHeight: 160 });
+            this.load.spritesheet('cats', '/static/cats-spritesheet.webp?v=20260310_1050', { frameWidth: 160, frameHeight: 160 });
 
             // Desk
             // Star working animation: repacked to grid to avoid WebGL max texture size limits
             // NOTE: prefer WebP for size, PNG fallback
             // 动态替换后按最新素材识别：当前 writing 素材为 300x300 单帧
-            this.load.spritesheet('star_working', '/static/star-working-spritesheet-grid.webp?v=20260310_1010', { frameWidth: 300, frameHeight: 300 });
+            this.load.spritesheet('star_working', '/static/star-working-spritesheet-grid.webp?v=20260310_1050', { frameWidth: 300, frameHeight: 300 });
 
             // Sync state animation (256x256, 多帧): 非同步显示首帧，同步从第2帧循环
-            this.load.spritesheet('sync_anim', '/static/sync-animation-v3-grid.webp?v=20260310_1010', { frameWidth: 256, frameHeight: 256 });
+            this.load.spritesheet('sync_anim', '/static/sync-animation-v3-grid.webp?v=20260310_1050', { frameWidth: 256, frameHeight: 256 });
 
             // Memo background image
             // memo 底图固定走 png，避免某些端 webp 透明通道异常导致“底图丢失”
-            this.load.image('memo_bg', '/static/memo-bg.webp?v=20260310_1010');
+            this.load.image('memo_bg', '/static/memo-bg.webp?v=20260310_1050');
             // Desk v2 (webp only)
-            this.load.image('desk_v2', '/static/desk-v3.webp?v=20260310_1010');
+            this.load.image('desk_v2', '/static/desk-v3.webp?v=20260310_1050');
             // Flower spritesheet (65x65, 16 frames)
-            this.load.spritesheet('flowers', '/static/flowers-bloom-v2.webp?v=20260310_1010', { frameWidth: FLOWERS_FRAME_W, frameHeight: FLOWERS_FRAME_H });
+            this.load.spritesheet('flowers', '/static/flowers-bloom-v2.webp?v=20260310_1050', { frameWidth: FLOWERS_FRAME_W, frameHeight: FLOWERS_FRAME_H });
 
             // Guest/Demo agent sprites
-            this.load.spritesheet('guest_anim_1', '/static/guest_anim_1.webp?v=20260310_1010', { frameWidth: 32, frameHeight: 32 });
-            this.load.spritesheet('guest_anim_2', '/static/guest_anim_2.webp?v=20260310_1010', { frameWidth: 32, frameHeight: 32 });
-            this.load.spritesheet('guest_anim_3', '/static/guest_anim_3.webp?v=20260310_1010', { frameWidth: 32, frameHeight: 32 });
-            this.load.spritesheet('guest_anim_4', '/static/guest_anim_4.webp?v=20260310_1010', { frameWidth: 32, frameHeight: 32 });
-            this.load.spritesheet('guest_anim_5', '/static/guest_anim_5.webp?v=20260310_1010', { frameWidth: 32, frameHeight: 32 });
-            this.load.spritesheet('guest_anim_6', '/static/guest_anim_6.webp?v=20260310_1010', { frameWidth: 32, frameHeight: 32 });
-            this.load.image('coco-role', '/static/coco-role.png?v=20260310_1010');
-            this.load.spritesheet('coco-idle', '/static/coco-idle.png?v=20260310_1010', { frameWidth: 256, frameHeight: 256 });
-            this.load.spritesheet('lumi_idle', '/static/lumi-idle-spritesheet.png?v=20260310_1010', { frameWidth: 128, frameHeight: 128 });
+            this.load.spritesheet('guest_anim_1', '/static/guest_anim_1.webp?v=20260310_1050', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('guest_anim_2', '/static/guest_anim_2.webp?v=20260310_1050', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('guest_anim_3', '/static/guest_anim_3.webp?v=20260310_1050', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('guest_anim_4', '/static/guest_anim_4.webp?v=20260310_1050', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('guest_anim_5', '/static/guest_anim_5.webp?v=20260310_1050', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('guest_anim_6', '/static/guest_anim_6.webp?v=20260310_1050', { frameWidth: 32, frameHeight: 32 });
+            this.load.spritesheet('lumi_idle', '/static/lumi-idle-spritesheet.png?v=20260310_1050', { frameWidth: 128, frameHeight: 128 });
+            this.load.spritesheet('coco-idle', '/static/coco-idle.webp?v=20260310_1110', { frameWidth: 256, frameHeight: 512 });
+            this.load.image('coco-role', '/static/coco-role.png?v=20260310_1050');
         }
 
         function create() {
@@ -4100,12 +4103,24 @@ function toggleBrokerPanel() {
             }
 
             // 呱呱 idle 动画（8 帧循环：眨眼 + 转头）
-            this.anims.create({
-                key: "coco_idle",
-                frames: this.anims.generateFrameNumbers("coco-idle", { start: 0, end: 7 }),
-                frameRate: 8,
-                repeat: -1
+            // 先检查纹理是否加载成功
+            const cocoTexture = this.textures.get('coco-idle');
+            console.log('🔍 coco-idle 纹理检查:', {
+                exists: !!cocoTexture,
+                frameTotal: cocoTexture?.frameTotal,
+                key: cocoTexture?.key
             });
+            if (cocoTexture && cocoTexture.frameTotal >= 8) {
+                this.anims.create({
+                    key: "coco_idle",
+                    frames: this.anims.generateFrameNumbers("coco-idle", { start: 0, end: 7 }),
+                    frameRate: 8,
+                    repeat: -1
+                });
+                console.log('✅ coco_idle 动画创建成功');
+            } else {
+                console.error('❌ coco-idle 纹理加载失败或帧数不足');
+            }
 
             // 呱呱静态图（备用）
 
