@@ -3590,6 +3590,16 @@ function toggleBrokerPanel() {
                         } else {
                             sprite = game.add.text(p.x, p.y, '🐦', { fontFamily: 'ArkPixel, monospace', fontSize: '30px' }).setOrigin(0.5, 1);
                         }
+                    }
+                    // 阿比特殊处理：使用 abby-idle 精灵表动画
+                    else if (agent.agentId === 'abby' || agent.name === '阿比') {
+                        const animKey = 'abby_idle';
+                        if (game && game.anims && game.anims.exists(animKey)) {
+                            sprite = game.add.sprite(p.x, p.y, animKey).setOrigin(0.5, 1).setScale(0.25);
+                            sprite.anims.play(animKey, true);
+                        } else {
+                            sprite = game.add.text(p.x, p.y, '🐲', { fontFamily: 'ArkPixel, monospace', fontSize: '30px' }).setOrigin(0.5, 1);
+                        }
                     } else if (isDemoNika || isDemoMercury) {
                         // 统一使用动态像素角色，避免依赖已删除的 demo 静态图
                         const animKey = 'guest_anim_1';
@@ -4066,6 +4076,7 @@ function toggleBrokerPanel() {
             this.load.spritesheet('coco-idle', '/static/coco-idle.webp?v=20260310_1110', { frameWidth: 256, frameHeight: 512 });
             this.load.image('coco-role', '/static/coco-role.png?v=20260310_1050');
             this.load.spritesheet('gugu-idle', '/static/gugu-idle.webp?v=20260310_1250', { frameWidth: 256, frameHeight: 512 });
+            this.load.spritesheet('abby-idle', '/static/abby-idle.webp?v=20260310_1500', { frameWidth: 256, frameHeight: 512 });
         }
 
         function create() {
@@ -4132,6 +4143,18 @@ function toggleBrokerPanel() {
                     repeat: -1
                 });
                 console.log('✅ gugu_idle 动画创建成功');
+            }
+
+            // 阿比 idle 动画（8 帧循环：抓握 + 咆哮）
+            const abbyTexture = this.textures.get('abby-idle');
+            if (abbyTexture && abbyTexture.frameTotal >= 8) {
+                this.anims.create({
+                    key: "abby_idle",
+                    frames: this.anims.generateFrameNumbers("abby-idle", { start: 0, end: 7 }),
+                    frameRate: 8,
+                    repeat: -1
+                });
+                console.log('✅ abby_idle 动画创建成功');
             }
 
             // 呱呱静态图（备用）
