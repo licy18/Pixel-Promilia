@@ -3315,8 +3315,15 @@ function toggleBrokerPanel() {
             }
         }
 
-        // Guest Agent 离开房间
+        // Guest Agent 离开房间（暂时禁用）
         function removeGuestSpriteByName(name) {
+            console.log('⚠️ 离开房间功能已禁用');
+            return;
+        }
+        function leaveGuestAgent(agentId, name) {
+            console.log('⚠️ 离开房间功能已禁用');
+            alert('离开房间功能暂时禁用中～');
+            return;
             const target = guestAgents.find(a => (a.name || '') === name);
             if (target && guestSprites[target.agentId]) {
                 guestSprites[target.agentId].sprite.destroy();
