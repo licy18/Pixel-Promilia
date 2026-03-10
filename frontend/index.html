@@ -3652,7 +3652,11 @@ function toggleBrokerPanel() {
                     // demo 水星下移 10px（仅 demo_mercury）
                     const yOffset = (DEMO_MODE && (agent.agentId === 'demo_mercury' || agent.name === '水星')) ? 10 : 0;
 
-                    const nameTextY = isDemo ? ((p.y + yOffset) - 80) : ((p.y + yOffset) - 120);
+                    // 阿比名字调高（因为放大到 0.35），露米名字调低
+                    const nameOffset = (agent.agentId === 'abby' || agent.name === '阿比') ? -40 : 
+                                      (agent.agentId === 'lumi' || agent.name === '露米') ? 20 : 0;
+
+                    const nameTextY = isDemo ? ((p.y + yOffset) - 80) : ((p.y + yOffset) - 120 + nameOffset);
                     const nameText = game.add.text(p.x, nameTextY, agent.name || '访客', {
                         fontFamily: 'ArkPixel, monospace',
                         fontSize: isDemo ? '16px' : '15px',
