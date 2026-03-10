@@ -3657,6 +3657,9 @@ function toggleBrokerPanel() {
                                       (agent.agentId === 'lumi' || agent.name === '露米') ? 20 : 0;
 
                     const nameTextY = isDemo ? ((p.y + yOffset) - 80) : ((p.y + yOffset) - 120 + nameOffset);
+                    if (agent.agentId === 'abby' || agent.agentId === 'lumi') {
+                        console.log('🏷️ 名字高度:', agent.name, 'nameOffset:', nameOffset, 'nameTextY:', nameTextY);
+                    }
                     const nameText = game.add.text(p.x, nameTextY, agent.name || '访客', {
                         fontFamily: 'ArkPixel, monospace',
                         fontSize: isDemo ? '16px' : '15px',
@@ -3703,7 +3706,10 @@ function toggleBrokerPanel() {
                         g.sprite.x = p.x;
                         g.sprite.y = p.y + yOffset;
                         g.nameText.x = p.x;
-                        g.nameText.y = (p.y + yOffset) - 120;
+                        // 阿比名字调高，露米名字调低
+                        const nameOffset = (agent.agentId === 'abby' || agent.name === '阿比') ? -40 : 
+                                          (agent.agentId === 'lumi' || agent.name === '露米') ? 20 : 0;
+                        g.nameText.y = (p.y + yOffset) - 120 + nameOffset;
                     }
 
                     g.nameText.setText(agent.name || '访客');
