@@ -12,7 +12,8 @@
     "authExpiresAt": null,
     "lastPushAt": null,
     "emoji": "🐸",
-    "color": "#4CAF50"
+    "color": "#4CAF50",
+    "avatar": "coco-role"
   },
   {
     "agentId": "gugu",

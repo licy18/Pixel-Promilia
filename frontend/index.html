@@ -3599,6 +3599,9 @@ function toggleBrokerPanel() {
                                 ? agent.avatar
                                 : (() => {
                                     const aid = String(agent.agentId || '');
+                                    // 呱呱专属形象
+                                    if (aid === 'coco') return 'coco-role';
+                                    // 其他访客使用随机分配
                                     let hash = 0;
                                     for (let i = 0; i < aid.length; i++) hash = (hash * 31 + aid.charCodeAt(i)) >>> 0;
                                     return GUEST_AVATARS[hash % GUEST_AVATARS.length];
@@ -4039,6 +4042,7 @@ function toggleBrokerPanel() {
             this.load.spritesheet('guest_anim_4', '/static/guest_anim_4.webp?v={{VERSION_TIMESTAMP}}', { frameWidth: 32, frameHeight: 32 });
             this.load.spritesheet('guest_anim_5', '/static/guest_anim_5.webp?v={{VERSION_TIMESTAMP}}', { frameWidth: 32, frameHeight: 32 });
             this.load.spritesheet('guest_anim_6', '/static/guest_anim_6.webp?v={{VERSION_TIMESTAMP}}', { frameWidth: 32, frameHeight: 32 });
+            this.load.image('coco-role', '/static/coco-role.png?v={{VERSION_TIMESTAMP}}');
             this.load.spritesheet('lumi_idle', '/static/lumi-idle-spritesheet.png?v={{VERSION_TIMESTAMP}}', { frameWidth: 128, frameHeight: 128 });
         }
 
