@@ -22,7 +22,7 @@ AREA_MAP = {
     "writing": "writing",
     "researching": "writing",
     "executing": "writing",
-    "syncing": "writing",
+    "syncing": "bedroom",
     "error": "error",
 }
 
@@ -69,12 +69,15 @@ def set_agent_state(agent_id: str, state: str, detail: str = None):
     
     # 找到并更新 Agent
     found = False
+    now = datetime.now().isoformat()
     for agent in agents:
         if agent.get("agentId") == agent_id:
             agent["state"] = state
             agent["area"] = AREA_MAP.get(state, "breakroom")
             agent["detail"] = detail or f"{AGENT_NAMES.get(agent_id, agent_id)} 状态：{state}"
-            agent["updated_at"] = datetime.now().isoformat()
+            agent["updated_at"] = now
+            agent["lastPushAt"] = now  # 关键：更新 lastPushAt 防止后端自动设为 offline
+            agent["authStatus"] = "approved"  # 确保保持 approved 状态
             found = True
             break
     
