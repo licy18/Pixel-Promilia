@@ -45,5 +45,21 @@
     "lastPushAt": null,
     "emoji": "🧚",
     "color": "#FF69B4"
+  },
+  {
+    "agentId": "abby",
+    "name": "阿比",
+    "isMain": false,
+    "state": "idle",
+    "detail": "待命中",
+    "area": "breakroom",
+    "source": "openclaw",
+    "joinKey": null,
+    "authStatus": "approved",
+    "authExpiresAt": null,
+    "lastPushAt": null,
+    "emoji": "🐰",
+    "color": "#9C27B0",
+    "avatar": null
   }
 ]
