@@ -2083,16 +2083,16 @@ if __name__ == "__main__":
 try:
     import subprocess
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    # 启动时自动恢复 guest agents
+    # Guest Agents 恢复机制（启动时检查）
+try:
+    import subprocess
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     restore_script = os.path.join(script_dir, "scripts", "restore-guest-agents.py")
     if os.path.exists(restore_script):
-        try:
-            subprocess.run(["python3", restore_script], check=True, capture_output=True, text=True)
-            print("✅ 启动时自动恢复 guest agents 完成")
-        except Exception as e:
-            print(f"⚠️ 恢复 guest agents 失败：{e}")
-    if os.path.exists(restore_script):
-        subprocess.run(["python3", restore_script], check=False)
+        result = subprocess.run(["python3", restore_script], check=False, capture_output=True, text=True)
+        if result.stdout:
+            print(result.stdout.strip())
+        print("✅ Guest agents 启动恢复完成")
 except Exception as e:
     print(f"⚠️ Guest agents 恢复失败：{e}")
 
