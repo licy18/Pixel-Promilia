@@ -3595,7 +3595,7 @@ function toggleBrokerPanel() {
                     else if (agent.agentId === 'abby' || agent.name === '阿比') {
                         const animKey = 'abby_idle';
                         if (game && game.anims && game.anims.exists(animKey)) {
-                            sprite = game.add.sprite(p.x, p.y, animKey).setOrigin(0.5, 1).setScale(0.25);
+                            sprite = game.add.sprite(p.x, p.y, animKey).setOrigin(0.5, 1).setScale(0.35);
                             sprite.anims.play(animKey, true);
                         } else {
                             sprite = game.add.text(p.x, p.y, '🐲', { fontFamily: 'ArkPixel, monospace', fontSize: '30px' }).setOrigin(0.5, 1);
