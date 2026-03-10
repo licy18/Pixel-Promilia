@@ -28,7 +28,8 @@
     "authExpiresAt": null,
     "lastPushAt": null,
     "emoji": "🐦",
-    "color": "#FF9800"
+    "color": "#FF9800",
+    "avatar": null
   },
   {
     "agentId": "lumi",
