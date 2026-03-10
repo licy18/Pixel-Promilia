@@ -241,7 +241,7 @@ def index():
     if _INDEX_HTML_CACHE is None:
         with open(FRONTEND_INDEX_FILE, "r", encoding="utf-8") as f:
             raw_html = f.read()
-        _INDEX_HTML_CACHE = raw_html.replace("20260310_1630", VERSION_TIMESTAMP)
+        _INDEX_HTML_CACHE = raw_html.replace("20260310_1640", VERSION_TIMESTAMP)
 
     resp = make_response(_INDEX_HTML_CACHE)
     resp.headers["Content-Type"] = "text/html; charset=utf-8"
@@ -257,7 +257,7 @@ def electron_standalone_page():
         target = FRONTEND_INDEX_FILE
     with open(target, "r", encoding="utf-8") as f:
         html = f.read()
-    html = html.replace("20260310_1630", VERSION_TIMESTAMP)
+    html = html.replace("20260310_1640", VERSION_TIMESTAMP)
     resp = make_response(html)
     resp.headers["Content-Type"] = "text/html; charset=utf-8"
     return resp
