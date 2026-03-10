@@ -29,6 +29,9 @@ AREA_MAP = {
 # 可用状态列表
 VALID_STATES = set(AREA_MAP.keys())
 
+# 脚本所在目录（Pixel-Promilia 根目录）
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Agent 显示名称
 AGENT_NAMES = {
     "coco": "呱呱",
@@ -47,14 +50,8 @@ def set_agent_state(agent_id: str, state: str, detail: str = None):
     
     # 读取当前状态（始终指向 Pixel-Promilia 目录）
     # 查找 Pixel-Promilia 目录
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    # 如果脚本在工作区目录，需要向上一级到 workspace-coco，再进入 Pixel-Promilia
-    if 'workspace-' in script_dir:
-        # 从 workspace-xxx 到 workspace-coco/Pixel-Promilia
-        base_dir = os.path.join(os.path.dirname(script_dir), 'workspace-coco', 'Pixel-Promilia')
-    else:
-        # 脚本就在 Pixel-Promilia 目录
-        base_dir = script_dir
+    # 脚本就在 Pixel-Promilia 目录，直接使用
+    base_dir = SCRIPT_DIR
     agents_file = os.path.join(base_dir, "agents-state.json")
     if not os.path.exists(agents_file):
         print(f"❌ 文件不存在：{agents_file}")
