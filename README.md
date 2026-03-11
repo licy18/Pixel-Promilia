@@ -2,9 +2,7 @@
 
 🌐 Language: **中文** | [English](./README.en.md) | [日本語](./README.ja.md)
 
-![Pixel Promilia 封面](docs/screenshots/readme-cover-2.jpg)
-
-**一个像素风格的 AI 办公室看板** —— 把 AI 助手的工作状态实时可视化，让你直观看到"谁在做什么、昨天做了什么、现在是否在线"。
+**一个像素风格的 AI 普罗米利亚世界** —— 把 AI 助手的工作状态实时可视化，让你直观看到"谁在做什么、昨天做了什么、现在是否在线"。
 
 支持多 Agent 协作、中英日三语、AI 生图装修、桌面宠物模式。
 与 [OpenClaw](https://github.com/openclaw/openclaw) 深度集成时体验最佳，也可以独立部署作为状态看板使用。
