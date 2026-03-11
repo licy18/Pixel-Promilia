@@ -50,9 +50,6 @@ python3 set_state.py writing "正在整理文档"
 python3 set_state.py error "发现问题，排查中"
 python3 set_state.py idle "待命中"
 ```
-
-![Pixel Promilia 预览](docs/screenshots/readme-cover-1.jpg)
-
 ---
 
 ## 🤔 适合谁用？
